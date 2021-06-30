@@ -5,3 +5,11 @@ CREATE TABLE users (
   password_hash TEXT NOT NULL,
   profile_photo_url TEXT
 );
+DROP TABLE IF EXISTS posts CASCADE;
+CREATE TABLE posts (
+  id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  user_id BIGINT REFERENCES users(id) NOT NULL,
+  photo_url TEXT,
+  caption TEXT,
+  tags TEXT [] NOT NULL
+);
