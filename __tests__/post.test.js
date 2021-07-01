@@ -106,6 +106,20 @@ describe('demo routes', () => {
 
   });
 
-  
+  it('deletes a post using DELETE', async () => {
+    const post = await Post.insert({
+      userId: user.id,
+      photoUrl: 'http://placekitten.com/200/300',
+      caption: 'its a cute',
+      tags: ['cool kat', 'nice'] 
+    });
+
+    const res = await agent 
+      .delete(`/api/v1/posts/${post.id}`)
+      .send(post);
+
+    expect(res.body).toEqual(post);
+  });
+
 
 });
