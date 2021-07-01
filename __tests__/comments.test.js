@@ -45,5 +45,15 @@ describe('comment routes', () => {
         post: post.id,
         comment: 'what a cuuuuute kitty'
       });
+
+    expect(res.body).toEqual({
+      id: '1',
+      commentBy: user.id,
+      post: post.id,
+      comment: 'what a cuuuuute kitty'
+    });
   });
+
+
+  
 });
