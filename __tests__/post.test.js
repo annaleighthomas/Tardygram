@@ -72,4 +72,40 @@ describe('demo routes', () => {
 
     expect(res.body).toEqual([post1, post2, post3]);
   });
+
+  it('gets a post by id via GET', async () => {
+
+    const post = await agent.post('/api/v1/posts').send({
+      userId: user.id,
+      photoUrl: 'http://placekitten.com/200/300',
+      caption: 'its a cute',
+      tags: ['cool kat', 'nice'] 
+    });
+
+    console.log('hiii', post.body.id);
+
+    const res = await agent
+      .get(`/api/v1/posts/${post.body.id}`);
+
+    expect(res.body).toEqual(post.body);
+  });
+
+  it('updates a post via PUT', async () => {
+    const post = {
+      userId: user.id,
+      photoUrl: 'http://placekitten.com/200/300',
+      caption: 'its a cute',
+      tags: ['cool kat', 'nice'] 
+    };
+
+    post.caption = 'its a cute lil kitten';
+
+    const res = await agent
+      .put(`/api/v1/posts/${post.body.id}`)
+      .send({ caption: 'its cute lil kitten' });
+
+    expect(res.body).toEqual(post);
+
+  });
+
 });
