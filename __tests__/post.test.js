@@ -82,8 +82,6 @@ describe('demo routes', () => {
       tags: ['cool kat', 'nice'] 
     });
 
-    console.log('hiii', post.body.id);
-
     const res = await agent
       .get(`/api/v1/posts/${post.body.id}`);
 
@@ -91,21 +89,23 @@ describe('demo routes', () => {
   });
 
   it('updates a post via PUT', async () => {
-    const post = {
+    const post =  await Post.insert({
       userId: user.id,
       photoUrl: 'http://placekitten.com/200/300',
       caption: 'its a cute',
       tags: ['cool kat', 'nice'] 
-    };
+    });
 
     post.caption = 'its a cute lil kitten';
 
     const res = await agent
-      .put(`/api/v1/posts/${post.body.id}`)
-      .send({ caption: 'its cute lil kitten' });
+      .patch(`/api/v1/posts/${post.id}`)
+      .send({ caption: 'its a cute lil kitten' });
 
     expect(res.body).toEqual(post);
 
   });
+
+  
 
 });
