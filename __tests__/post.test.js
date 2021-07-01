@@ -3,7 +3,7 @@ import setup from '../data/setup.js';
 import request from 'supertest';
 import app from '../lib/app.js';
 import UserService from '../lib/services/UserService.js';
-// import Post from '../lib/models/Post.js';
+import Post from '../lib/models/Post.js';
 
 
 describe('demo routes', () => {
@@ -11,7 +11,7 @@ describe('demo routes', () => {
   let user = {};
   let agent;
 
-  beforeAll(async() => {
+  beforeEach(async() => {
     await setup(pool);
     agent = request.agent(app);
     user = await UserService.create({
@@ -45,6 +45,31 @@ describe('demo routes', () => {
     });
   });
 
+  it('gets a post via GET', async () => {
+    const post1 = await Post.insert({
+      userId: user.id,
+      photoUrl: 'http://placekitten.com/200/300',
+      caption: 'another kitten',
+      tags: ['kitten', 'cute']
+    });
 
+    const post2 = await Post.insert({
+      userId: user.id,
+      photoUrl: 'http://placekitten.com/200/300',
+      caption: 'again a kitten',
+      tags: ['kitty', 'cool']
+    });
 
+    const post3 = await Post.insert({
+      userId: user.id,
+      photoUrl: 'http://placekitten.com/200/300',
+      caption: 'kitty kat',
+      tags: ['kat', 'wow']
+    });
+
+    const res = await agent
+      .get('/api/v1/posts');
+
+    expect(res.body).toEqual([post1, post2, post3]);
+  });
 });
